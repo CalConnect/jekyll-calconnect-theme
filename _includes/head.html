@@ -1,0 +1,33 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% assign page_title = page.title | default: page.name %}
+  <title>{% if page_title %}{{ page_title | escape }} | {% endif %}{{ site.title | default: "CalConnect" }}</title>
+  <meta name="description"
+    content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}" />
+
+  {% if site.favicon %}
+  <link rel="icon" type="image/png" href="{{ site.favicon | relative_url }}" sizes="96x96" />
+  {% endif %}
+
+  <!-- Google Fonts - Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Critical CSS to prevent flash of unstyled content -->
+  <style>
+    html{scroll-behavior:smooth!important}
+    body{font-feature-settings:"kern" 1,"liga" 1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:#fff!important;color:#1e293b!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,sans-serif!important;opacity:1!important}
+    html.dark body{background-color:#0f172a!important;color:#f1f5f9!important}
+    #nav-header{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:50!important;height:64px!important}
+    main{padding-top:64px!important}
+  </style>
+
+  <!-- Vite Stylesheet (Tailwind CSS) -->
+  {% vite_stylesheet_tag application %}
+
+  {% if jekyll.environment == 'production' and site.google_analytics %}
+  {% include google-analytics.html %}
+  {% endif %}
+</head>

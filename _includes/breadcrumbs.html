@@ -1,0 +1,23 @@
+<nav class="hidden lg:flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4" aria-label="Breadcrumb">
+  <ol class="flex items-center flex-wrap gap-2 list-none p-0 m-0">
+    <li><a href="{{ '/' | relative_url }}" class="hover:text-gray-700 dark:hover:text-gray-300">Home</a></li>
+    {% assign crumbs = page.url | remove:'/index.html' | split: '/' %}
+    {% if page.collection == 'posts' %}
+    <li>/ <a href="{{ '/news' | relative_url }}" class="hover:text-gray-700 dark:hover:text-gray-300">News</a></li>
+    <li>/ {{ page.title }}</li>
+    {% else %}
+    {% for crumb in crumbs offset: 1 %}
+    {% if forloop.last %}
+    <li>/ {{ page.title }}</li>
+    {% else %}
+    {% assign crumb_limit = forloop.index | plus: 1 %}
+    {% assign crumb_url = '' %}
+    {% for crumb in crumbs limit: crumb_limit %}
+      {% assign crumb_url = crumb_url | append: crumb | append: '/' %}
+    {% endfor %}
+    <li>/ <a href="{{ crumb_url | absolute_url }}" class="hover:text-gray-700 dark:hover:text-gray-300">{{ crumb | replace: '-', ' ' | capitalize }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+  </ol>
+</nav>
