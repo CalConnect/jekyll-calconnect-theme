@@ -16,7 +16,6 @@ Gem::Specification.new do |spec|
   ]
 
   spec.add_runtime_dependency "jekyll", "~> 4.3"
-  spec.add_runtime_dependency "jekyll-vite", "~> 3.0"
 
   spec.add_development_dependency "bundler", "~> 2.0"
 end
