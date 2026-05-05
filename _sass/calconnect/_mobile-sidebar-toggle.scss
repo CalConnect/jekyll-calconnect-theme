@@ -1,0 +1,35 @@
+.mobile-sidebar-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-primary-500, #6366f1);
+  background: var(--color-primary-50, #eef2ff);
+  border: 1px solid var(--color-primary-200, #c7d2fe);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dark .mobile-sidebar-toggle {
+  color: var(--color-primary-300, #a5b4fc);
+  background: var(--color-primary-900, #312e81);
+  border-color: var(--color-primary-700, #4338ca);
+}
+
+.mobile-sidebar-toggle:hover {
+  background: var(--color-primary-100, #e0e7ff);
+}
+
+.dark .mobile-sidebar-toggle:hover {
+  background: var(--color-primary-800, #3730a3);
+}
+
+@media (min-width: 1024px) {
+  .mobile-sidebar-toggle {
+    display: none;
+  }
+}
