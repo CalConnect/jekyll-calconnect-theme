@@ -10,7 +10,7 @@
   font-weight: 600;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
-  color: #1e293b;
+  color: var(--color-gray-800, #1e293b);
 }
 
 .documentation .body h3 {
@@ -18,22 +18,22 @@
   font-weight: 600;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-  color: #334155;
+  color: var(--color-gray-700, #334155);
 }
 
 .documentation .body p {
   margin-bottom: 1rem;
-  color: #475569;
+  color: var(--color-gray-600, #475569);
 }
 
 .documentation .body a {
-  color: #6366f1;
+  color: var(--color-primary-500, #6366f1);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .documentation .body a:hover {
-  color: #4f46e5;
+  color: var(--color-primary-600, #4f46e5);
 }
 
 // Lists
@@ -48,7 +48,7 @@
 .documentation .sectionbody dl {
   margin-bottom: 1.25rem;
   padding-left: 1.75rem;
-  color: #475569;
+  color: var(--color-gray-600, #475569);
   list-style-position: outside;
 }
 
@@ -95,18 +95,18 @@ ol.list-none {
 .documentation .body li::marker,
 .documentation .post-content li::marker,
 .documentation .sectionbody li::marker {
-  color: #6366f1;
+  color: var(--color-primary-500, #6366f1);
 }
 
 // Definition lists
 .documentation .body dt {
   font-weight: 600;
-  color: #1e293b;
+  color: var(--color-gray-800, #1e293b);
   margin-bottom: 0.25rem;
 }
 
 .documentation .body dd {
   margin-left: 1.5rem;
   margin-bottom: 0.75rem;
-  color: #475569;
+  color: var(--color-gray-600, #475569);
 }

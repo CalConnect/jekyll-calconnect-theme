@@ -1,50 +1,59 @@
 // Dark mode overrides
+// Uses CSS custom properties from Tailwind's @theme where possible.
 
 // Layout
 .dark .documentation > article > header {
-  border-bottom-color: #334155;
+  border-bottom-color: var(--color-gray-700, #334155);
 }
 
 .dark .documentation > article > header h1 {
-  color: #f8fafc;
+  color: var(--color-gray-50, #f8fafc);
 }
 
 // Navigation
 .dark .docs-nav .nav-group-title {
-  color: #64748b;
-  border-top-color: #334155;
+  color: var(--color-gray-500, #64748b);
+  border-top-color: var(--color-gray-700, #334155);
 }
 
 .dark .docs-nav .nav-items a:hover {
-  background: #1e293b;
-  color: #f1f5f9;
+  background: var(--color-gray-800, #1e293b);
+  color: var(--color-gray-100, #f1f5f9);
 }
 
 .dark .docs-nav .nav-items a.active {
-  background: #312e81;
-  color: #a5b4fc;
+  background: var(--color-primary-900, #312e81);
+  color: var(--color-primary-300, #a5b4fc);
 }
 
 .dark .nav-toggle:hover {
-  background: #1e293b;
-  color: #f1f5f9;
+  background: var(--color-gray-800, #1e293b);
+  color: var(--color-gray-100, #f1f5f9);
 }
 
 .dark .nav-subsection {
-  border-left-color: #334155;
+  border-left-color: var(--color-gray-700, #334155);
+}
+
+// Mobile sidebar drawer
+@media (max-width: 1023px) {
+  .dark .docs-nav {
+    background: var(--color-gray-950, #0f172a);
+    border-right-color: var(--color-gray-700, #334155);
+  }
 }
 
 // Typography
 .dark .documentation .body h2 {
-  color: #f1f5f9;
+  color: var(--color-gray-100, #f1f5f9);
 }
 
 .dark .documentation .body h3 {
-  color: #e2e8f0;
+  color: var(--color-gray-200, #e2e8f0);
 }
 
 .dark .documentation .body p {
-  color: #94a3b8;
+  color: var(--color-gray-400, #94a3b8);
 }
 
 .dark .documentation .body ul,
@@ -56,36 +65,36 @@
 .dark .documentation .sectionbody ul,
 .dark .documentation .sectionbody ol,
 .dark .documentation .sectionbody dl {
-  color: #94a3b8;
+  color: var(--color-gray-400, #94a3b8);
 }
 
 .dark .documentation .body li::marker,
 .dark .documentation .post-content li::marker,
 .dark .documentation .sectionbody li::marker {
-  color: #818cf8;
+  color: var(--color-primary-400, #818cf8);
 }
 
 .dark .documentation .body dt {
-  color: #f1f5f9;
+  color: var(--color-gray-100, #f1f5f9);
 }
 
 .dark .documentation .body dd {
-  color: #94a3b8;
+  color: var(--color-gray-400, #94a3b8);
 }
 
 // Code
 .dark .documentation .body :not(pre) > code {
-  background: #334155;
-  color: #e2e8f0;
+  background: var(--color-gray-700, #334155);
+  color: var(--color-gray-200, #e2e8f0);
 }
 
 // Tables
 .dark .documentation .body th,
 .dark .documentation .body td {
-  border-bottom-color: #334155;
+  border-bottom-color: var(--color-gray-700, #334155);
 }
 
 .dark .documentation .body th {
-  background: #1e293b;
-  color: #f1f5f9;
+  background: var(--color-gray-800, #1e293b);
+  color: var(--color-gray-50, #f1f5f9);
 }

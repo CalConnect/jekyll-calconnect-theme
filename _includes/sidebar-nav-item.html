@@ -1,0 +1,108 @@
+{% comment %}
+  Renders a single sidebar nav item. Expects `include.item`.
+  Types: link, collection, collapsible, group, years.
+{% endcomment %}
+
+{% comment %} --- Collection helper --- {% endcomment %}
+{% assign _collection_name = include.item.collection %}
+{% case _collection_name %}
+  {% when 'about_pages' %}
+    {% assign _docs = site.about_pages %}
+  {% when 'membership_pages' %}
+    {% assign _docs = site.membership_pages %}
+  {% when 'events' %}
+    {% assign _docs = site.events %}
+  {% when 'resources' %}
+    {% assign _docs = site.resources %}
+  {% else %}
+    {% assign _docs = site.posts %}
+{% endcase %}
+
+{% comment %} --- LINK TYPE --- {% endcomment %}
+{% if include.item.type == 'link' or include.item.type == nil %}
+{% assign _active = false %}
+{% if page.url == include.item.url %}{% assign _active = true %}{% endif %}
+<li>
+  <a href="{{ include.item.url | relative_url }}" {% if _active %}class="active"{% endif %}>
+    {{ include.item.label }}
+  </a>
+</li>
+
+{% comment %} --- COLLECTION TYPE --- {% endcomment %}
+{% elsif include.item.type == 'collection' %}
+  {% if include.item.sort_field == 'date' and include.item.sort_order == 'desc' %}
+    {% assign _sorted = _docs | sort: 'date' | reverse %}
+  {% elsif include.item.sort_field %}
+    {% assign _sorted = _docs | sort: include.item.sort_field %}
+  {% else %}
+    {% assign _sorted = _docs %}
+  {% endif %}
+  {% for doc in _sorted %}
+  {% assign _doc_active = false %}
+  {% if page.url == doc.url %}{% assign _doc_active = true %}{% endif %}
+  <li>
+    <a href="{{ doc.url | relative_url }}" {% if _doc_active %}class="active"{% endif %}>
+      {{ doc.title | default: doc.name }}
+    </a>
+  </li>
+  {% endfor %}
+
+{% comment %} --- COLLAPSIBLE TYPE --- {% endcomment %}
+{% elsif include.item.type == 'collapsible' %}
+{% assign _open = false %}
+{% if page.url contains include.item.url_filter %}{% assign _open = true %}{% endif %}
+<li>
+  <span class="nav-toggle {% if _open %}open{% endif %}">{{ include.item.label }}</span>
+  <ul class="nav-subsection {% unless _open %}collapsed{% endunless %}">
+    {% if include.item.first_child_label %}
+    {% assign _first_active = false %}
+    {% if page.url contains include.item.url_filter %}{% assign _first_active = true %}{% endif %}
+    <li><a href="{{ include.item.url | relative_url }}" {% if _first_active %}class="active"{% endif %}>{{ include.item.first_child_label }}</a></li>
+    {% endif %}
+    {% for doc in _docs %}
+      {% assign _url_matches = false %}
+      {% if doc.url contains include.item.url_filter %}{% assign _url_matches = true %}{% endif %}
+      {% assign _excluded = false %}
+      {% if doc.url == include.item.url %}{% assign _excluded = true %}{% endif %}
+      {% if include.item.exclude_urls %}
+        {% for excl in include.item.exclude_urls %}
+          {% if doc.url == excl %}{% assign _excluded = true %}{% endif %}
+        {% endfor %}
+      {% elsif include.item.exclude_url %}
+        {% if doc.url == include.item.exclude_url %}{% assign _excluded = true %}{% endif %}
+      {% endif %}
+      {% if _url_matches and _excluded == false %}
+    {% assign _child_active = false %}
+    {% if page.url == doc.url %}{% assign _child_active = true %}{% endif %}
+    <li>
+      <a href="{{ doc.url | relative_url }}" {% if _child_active %}class="active"{% endif %}>
+        {{ doc.title }}
+      </a>
+    </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</li>
+
+{% comment %} --- YEARS TYPE --- {% endcomment %}
+{% elsif include.item.type == 'years' %}
+  {% assign _years = site.data.news_years %}
+  {% for year in _years %}
+  {% assign _yactive = false %}
+  {% if page.url contains year %}{% assign _yactive = true %}{% endif %}
+  <li>
+    <a href="/news/{{ year }}/" {% if _yactive %}class="active"{% endif %}>
+      {{ year }}
+    </a>
+  </li>
+  {% endfor %}
+
+{% comment %} --- GROUP TYPE --- {% endcomment %}
+{% elsif include.item.type == 'group' %}
+  </ul>
+  <div class="nav-group-title">{{ include.item.label }}</div>
+  <ul class="nav-items">
+    {% for child in include.item.children %}
+      {% include sidebar-nav-item.html item=child %}
+    {% endfor %}
+{% endif %}

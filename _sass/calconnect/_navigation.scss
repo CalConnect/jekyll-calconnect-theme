@@ -9,7 +9,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #94a3b8;
+  color: var(--color-gray-400, #94a3b8);
   margin-bottom: 0.5rem;
   padding: 0 0.75rem;
 }
@@ -20,11 +20,11 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #94a3b8;
+  color: var(--color-gray-400, #94a3b8);
   margin-top: 1rem;
   margin-bottom: 0.25rem;
   padding: 0.25rem 0.75rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--color-gray-200, #e2e8f0);
 }
 
 .docs-nav .nav-group-title:first-child {
@@ -45,7 +45,7 @@
 .docs-nav .nav-items a {
   display: block;
   padding: 0.5rem 0.75rem;
-  color: #64748b;
+  color: var(--color-gray-500, #64748b);
   text-decoration: none;
   border-radius: 0.375rem;
   font-size: 0.875rem;
@@ -53,20 +53,20 @@
 }
 
 .docs-nav .nav-items a:hover {
-  background: #f1f5f9;
-  color: #1e293b;
+  background: var(--color-gray-100, #f1f5f9);
+  color: var(--color-gray-800, #1e293b);
 }
 
 .docs-nav .nav-items a.active {
-  background: #eef2ff;
-  color: #4f46e5;
+  background: var(--color-primary-50, #eef2ff);
+  color: var(--color-primary-600, #4f46e5);
   font-weight: 500;
 }
 
 // Collapsible subsections
 .nav-subsection {
   margin-left: 0.75rem;
-  border-left: 2px solid #e2e8f0;
+  border-left: 2px solid var(--color-gray-200, #e2e8f0);
   padding-left: 0.75rem;
   margin-top: 0.25rem;
 }
@@ -77,7 +77,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 0.75rem;
-  color: #64748b;
+  color: var(--color-gray-500, #64748b);
   font-size: 0.875rem;
   border-radius: 0.375rem;
   cursor: pointer;
@@ -86,8 +86,8 @@
 }
 
 .nav-toggle:hover {
-  background: #f1f5f9;
-  color: #1e293b;
+  background: var(--color-gray-100, #f1f5f9);
+  color: var(--color-gray-800, #1e293b);
 }
 
 // Arrow indicator

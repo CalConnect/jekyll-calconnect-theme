@@ -1,10 +1,51 @@
-<footer class="bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-white/10 py-12 transition-colors">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="pt-8 border-t border-gray-200 dark:border-white/10">
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        &copy; {{ site.time | date: '%Y' }} CalConnect<sup>SM</sup>.
-        <a href="https://www.calconnect.org/about/policies/copyright-and-licensing" class="hover:text-gray-700 dark:hover:text-gray-300">Copyright</a>
+<footer class="bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-white/10 transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    {% if site.data.navigation_footer %}
+    <div class="grid grid-cols-2 md:grid-cols-{{ site.data.navigation_footer.size | plus: 1 | at_least: 2 }} gap-8 mb-8">
+      <!-- Logo + description column -->
+      <div class="col-span-2 md:col-span-1">
+        {% if site.logo %}
+        <img src="{{ site.logo | relative_url }}" alt="{{ site.title }}" class="h-8 mb-4 block dark:hidden">
+        <img src="{{ site.logo_dark | default: site.logo | relative_url }}" alt="{{ site.title }}" class="h-8 mb-4 hidden dark:block">
+        {% endif %}
+        {% if site.description %}
+        <p class="text-sm text-gray-600 dark:text-gray-500">{{ site.description }}</p>
+        {% endif %}
+      </div>
+      <!-- Nav columns -->
+      {% for column in site.data.navigation_footer %}
+      <div>
+        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">{{ column.title }}</h3>
+        <ul class="space-y-2">
+          {% for link in column.links %}
+          <li>
+            <a href="{{ link.url | relative_url }}"
+               class="text-sm text-gray-600 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
+              {{ link.label }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="pt-8 border-t border-gray-200 dark:border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-gray-500 dark:text-gray-600">
+        &copy; {{ site.time | date: '%Y' }} {{ site.title | default: 'CalConnect' }}<sup>SM</sup>.
+        <a href="{{ site.copyright_url | default: '/about/policies/copyright-and-licensing' | relative_url }}" class="hover:text-gray-700 dark:hover:text-gray-300">Copyright</a>
       </p>
+      {% if site.data.social_links %}
+      <div class="flex gap-3">
+        {% for social in site.data.social_links %}
+        <a href="{{ social.url }}" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors" aria-label="{{ social.platform | capitalize }}" target="_blank" rel="noopener">
+          {% assign icon_path = social.platform | prepend: 'icons/' | append: '.svg' %}
+          {% include {{ icon_path }} %}
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
   </div>
 </footer>

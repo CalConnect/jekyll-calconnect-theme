@@ -1,9 +1,74 @@
 <header id="nav-header" class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-950 backdrop-blur-md border-b border-gray-200 dark:border-white/10 transition-colors">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
-      <a href="{{ '/' | relative_url }}" class="flex items-center">
-        <span class="text-lg font-semibold text-gray-900 dark:text-white">{{ site.title | default: "CalConnect" }}</span>
+      <!-- Left: Logo -->
+      <a href="{{ '/' | relative_url }}" class="flex items-center gap-2.5">
+        {% if site.logo %}
+        <img src="{{ site.logo | relative_url }}" alt="{{ site.title | default: 'CalConnect' }}" class="h-8 w-auto block dark:hidden">
+        <img src="{{ site.logo_dark | default: site.logo | relative_url }}" alt="{{ site.title | default: 'CalConnect' }}" class="h-8 w-auto hidden dark:block">
+        {% else %}
+        <span class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">{{ site.title | default: "CalConnect" }}</span>
+        {% endif %}
       </a>
+
+      <!-- Center: Desktop nav -->
+      {% if site.data.navigation_header %}
+      <nav class="hidden lg:flex items-center gap-1" aria-label="Main navigation">
+        {% for item in site.data.navigation_header %}
+        <a href="{{ item.url | relative_url }}"
+           class="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors
+                  {% if item.external %}inline-flex items-center gap-1{% endif %}">
+          {{ item.label }}
+          {% if item.external %}{% include icons/external-link.svg %}{% endif %}
+        </a>
+        {% endfor %}
+      </nav>
+      {% endif %}
+
+      <!-- Right: Theme toggle + CTA + Mobile menu -->
+      <div class="flex items-center gap-2">
+        <button id="theme-toggle" type="button"
+                class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                aria-label="Toggle dark mode">
+          <span class="dark:hidden">{% include icons/moon.svg %}</span>
+          <span class="hidden dark:block">{% include icons/sun.svg %}</span>
+        </button>
+
+        {% if site.header_cta %}
+        <a href="{{ site.header_cta.url | relative_url }}"
+           class="hidden sm:inline-flex items-center px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-full hover:bg-primary-600 transition-colors">
+          {{ site.header_cta.label }}
+        </a>
+        {% endif %}
+
+        <button id="mobile-menu-btn" type="button"
+                class="lg:hidden p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                aria-label="Open menu" aria-expanded="false">
+          {% include icons/menu.svg %}
+        </button>
+      </div>
     </div>
   </div>
+
+  <!-- Mobile dropdown menu (for non-docs pages) -->
+  {% if site.data.navigation_header %}
+  <div id="mobile-menu" class="lg:hidden hidden border-t border-gray-200 dark:border-white/10">
+    <div class="px-4 py-4 space-y-1">
+      {% for item in site.data.navigation_header %}
+      <a href="{{ item.url | relative_url }}"
+         class="block px-4 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-white/10
+                {% if item.external %}flex items-center gap-1{% endif %}">
+        {{ item.label }}
+        {% if item.external %}{% include icons/external-link.svg %}{% endif %}
+      </a>
+      {% endfor %}
+      {% if site.header_cta %}
+      <a href="{{ site.header_cta.url | relative_url }}"
+         class="block px-4 py-2 mt-2 text-center bg-primary-500 text-white font-medium rounded-full hover:bg-primary-600">
+        {{ site.header_cta.label }}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
 </header>
