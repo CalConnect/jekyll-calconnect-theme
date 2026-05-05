@@ -1,4 +1,4 @@
-# calconnect-theme
+# jekyll-calconnect-theme
 
 Shared Jekyll theme gem for CalConnect sites (calconnect.org, DEVGUIDE, standards.calconnect.org).
 
@@ -7,13 +7,13 @@ Shared Jekyll theme gem for CalConnect sites (calconnect.org, DEVGUIDE, standard
 Add to your site's `Gemfile`:
 
 ```ruby
-gem "calconnect-theme", git: "git@github.com:calconnect/calconnect-theme.git"
+gem "jekyll-calconnect-theme", git: "git@github.com:calconnect/calconnect-theme.git"
 ```
 
 Add to your site's `_config.yml`:
 
 ```yaml
-theme: calconnect-theme
+theme: jekyll-calconnect-theme
 ```
 
 ## Site-specific overrides
