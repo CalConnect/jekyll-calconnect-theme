@@ -1,11 +1,24 @@
 {% comment %}
   Sidebar navigation — fully data-driven from site.data.navigation_sidebar.sections.
-  Finds the matching section by comparing page.url against each section's `match` string,
+  Matches the current page URL against each section's `match` string or `match_list` array,
   then renders items by type: link, collection, collapsible, group, years.
 {% endcomment %}
 {% assign current_section = nil %}
 {% for section in site.data.navigation_sidebar.sections %}
-  {% if page.url contains section.match %}
+  {% assign _matched = false %}
+  {% if section.match_list %}
+    {% for m in section.match_list %}
+      {% if page.url contains m %}
+        {% assign _matched = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% elsif section.match %}
+    {% if page.url contains section.match %}
+      {% assign _matched = true %}
+    {% endif %}
+  {% endif %}
+  {% if _matched %}
     {% assign current_section = section %}
     {% break %}
   {% endif %}

@@ -51,14 +51,31 @@
 {% elsif include.item.type == 'collapsible' %}
 {% assign _open = false %}
 {% if page.url contains include.item.url_filter %}{% assign _open = true %}{% endif %}
+{% if include.item.url and page.url == include.item.url %}{% assign _open = true %}{% endif %}
+{% if include.item.children %}
+  {% for child in include.item.children %}
+    {% if page.url == child.url %}{% assign _open = true %}{% break %}{% endif %}
+  {% endfor %}
+{% endif %}
 <li>
   <span class="nav-toggle {% if _open %}open{% endif %}">{{ include.item.label }}</span>
   <ul class="nav-subsection {% unless _open %}collapsed{% endunless %}">
     {% if include.item.first_child_label %}
     {% assign _first_active = false %}
-    {% if page.url contains include.item.url_filter %}{% assign _first_active = true %}{% endif %}
+    {% if page.url == include.item.url %}{% assign _first_active = true %}{% endif %}
     <li><a href="{{ include.item.url | relative_url }}" {% if _first_active %}class="active"{% endif %}>{{ include.item.first_child_label }}</a></li>
     {% endif %}
+    {% if include.item.children %}
+      {% for child in include.item.children %}
+      {% assign _child_active = false %}
+      {% if page.url == child.url %}{% assign _child_active = true %}{% endif %}
+    <li>
+      <a href="{{ child.url | relative_url }}" {% if _child_active %}class="active"{% endif %}>
+        {{ child.label }}
+      </a>
+    </li>
+      {% endfor %}
+    {% elsif include.item.collection %}
     {% for doc in _docs %}
       {% assign _url_matches = false %}
       {% if doc.url contains include.item.url_filter %}{% assign _url_matches = true %}{% endif %}
@@ -81,6 +98,7 @@
     </li>
       {% endif %}
     {% endfor %}
+    {% endif %}
   </ul>
 </li>
 
