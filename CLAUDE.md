@@ -35,22 +35,42 @@ base.html        → HTML shell: head, header, footer, Vite JS entry
 
 CSS and JS live under `_frontend/` and are built by [jekyll-vite](https://github.com/elixir-vite/vite_ruby) in the consumer site. The theme provides:
 - `_frontend/entrypoints/application.css` — Tailwind v4 config (`@import "tailwindcss"`), `@tailwindcss/typography` plugin, custom theme tokens (primary/accent colors, fonts)
-- `_frontend/entrypoints/application.js` — imports `theme.js` (dark/light toggle with localStorage) and `navigation.js` (mobile menu, active state highlighting), plus sidebar collapsible toggle init
-- `_sass/calconnect/` — supplementary SCSS for layout, navigation, typography, code blocks, tables, dark mode
+- `_frontend/entrypoints/application.js` — imports `theme.js` (dark/light toggle with localStorage) and `navigation.js` (mobile menu, sidebar drawer, active state highlighting), plus sidebar collapsible toggle init
+- `_sass/calconnect/` — supplementary SCSS for layout, navigation, typography, code blocks, tables, dark mode. All colors use `var(--color-*, fallback)` referencing Tailwind's CSS custom properties — single source of truth for the palette.
 
-### Sidebar navigation (default.html layout)
+### Sidebar navigation
 
-The sidebar is fully data-driven from `site.data.navigation_sidebar.sections`. Each section has a `match` string matched against `page.url`. Item types: `link`, `collection` (iterates a Jekyll collection), `collapsible` (expandable with URL filtering), `group` (labeled sub-group), `years` (year list from `site.data.news_years`). The layout has no hardcoded page knowledge — all configuration is in the consumer site's `_data/navigation_sidebar.yml`.
+The sidebar is fully data-driven from `site.data.navigation_sidebar.sections`. Each section has a `match` string matched against `page.url`. The rendering is split across two includes:
+- `sidebar-nav.html` — finds the matching section, iterates its items
+- `sidebar-nav-item.html` — renders a single item by type. Group items recursively include this for their children, eliminating duplication.
+
+Item types: `link`, `collection` (iterates a Jekyll collection), `collapsible` (expandable with URL filtering), `group` (labeled sub-group with children), `years` (year list from `site.data.news_years`).
+
+### Icon system
+
+Icons live in `_includes/icons/` as `.svg` files (Liquid templates that output `<svg>` markup). Each accepts an optional `class` parameter for sizing (`{{ include.class | default: 'w-5 h-5' }}`). Consumer sites override individual icons by dropping a same-named file in their own `_includes/icons/`.
+
+### Site configuration (_config.yml)
+
+- `site.logo` / `site.logo_dark` — header/footer logo paths (dark variant for dark mode)
+- `site.header_cta` — `{url, label}` for a CTA button in the header
+- `site.data.navigation_header` — list of `{label, url, external?}` items for header nav
+- `site.data.navigation_footer` — list of `{title, links: [{label, url}]}` columns for footer
+- `site.data.social_links` — list of `{platform, url}` for footer social icons (github, linkedin, twitter/x, youtube)
+- `site.google_analytics` — GA4 measurement ID (production only)
+- Favicon files at site root: `favicon.svg`, `favicon-96x96.png`, `favicon.ico`, `apple-touch-icon.png`, `site.webmanifest`
 
 ### Includes
 
-- `head.html` — meta tags, Google Fonts (Inter + JetBrains Mono), critical inline CSS to prevent FOUC, `{% vite_stylesheet_tag %}`
-- `custom-head.html` — Vite client + JS tag (for dev HMR in consumer sites)
-- `header.html` — fixed top nav bar
-- `footer.html` — copyright bar
+- `head.html` — meta tags, full favicon set, Google Fonts (Inter + JetBrains Mono), critical inline CSS to prevent FOUC, `{% vite_stylesheet_tag %}`, GA4 (production only)
+- `custom-head.html` — Vite client tag (for dev HMR in consumer sites)
+- `header.html` — fixed top nav with logo, desktop nav, dark mode toggle, CTA button, mobile hamburger (sidebar drawer on docs pages, dropdown on others)
+- `footer.html` — logo + description column, data-driven nav columns, social links, copyright
+- `sidebar-nav.html` + `sidebar-nav-item.html` — data-driven sidebar navigation
 - `breadcrumbs.html` — URL-derived breadcrumb trail
 - `feedback.html` — "Was this helpful?" link
-- `google-analytics.html` — conditional GA snippet (production only)
+- `google-analytics.html` — GA4 gtag.js snippet
+- `icons/*.svg` — parametric icon includes (class parameter for sizing)
 
 ### Dark mode
 
@@ -66,4 +86,4 @@ Class-based (`html.dark`). `theme.js` runs immediately (before DOM ready) to pre
 
 ### Key Tailwind notes
 
-Uses Tailwind v4 (CSS-first config with `@theme` blocks, not `tailwind.config.js`). Colors use `gray` not `slate` for class compatibility. Primary color scale is indigo-based; accent is cyan.
+Uses Tailwind v4 (CSS-first config with `@theme` blocks, not `tailwind.config.js`). Colors use `gray` not `slate` for class compatibility. Primary color scale is indigo-based; accent is cyan. SCSS files reference colors via `var(--color-*, fallback)` to stay in sync with the Tailwind theme.
