@@ -1,0 +1,61 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      next_version:
+        required: true
+        default: 'skip'
+  repository_dispatch:
+    types: [do-release]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.client_payload.ref || 'main' }}
+
+      - if: github.event_name == 'repository_dispatch'
+        run: git fetch --tags origin
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Bump version, tag, and push
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.next_version != 'skip' && inputs.next_version != '' }}
+        run: |
+          gem install gem-release
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          gem bump --version ${{ inputs.next_version }} --tag --push
+
+      - name: Build gem
+        run: gem build jekyll-calconnect-theme.gemspec
+
+      - name: Configure RubyGems credentials
+        uses: rubygems/configure-rubygems-credentials@v1
+
+      - name: Publish to RubyGems
+        run: gem push jekyll-calconnect-theme-*.gem
+
+      - name: Wait for release to propagate
+        run: gem exec rubygems-await jekyll-calconnect-theme-*.gem
+
+      - name: Dispatch release-passed event
+        run: |
+          GEM_VERSION=$(ruby -e "puts Gem::Specification.load('jekyll-calconnect-theme.gemspec').version")
+          gh api repos/${{ github.repository }}/dispatches \
+            -f event_type=release-passed \
+            -f "client_payload[ref]=refs/tags/v${GEM_VERSION}" \
+            -f "client_payload[sha]=${{ github.sha }}" \
+            -f "client_payload[type]=release-passed"
+        env:
+          GH_TOKEN: ${{ github.token }}
