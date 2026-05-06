@@ -35,4 +35,17 @@
   {% if jekyll.environment == 'production' and site.google_analytics %}
   {% include google-analytics.html %}
   {% endif %}
+
+  {% if site.schema_org %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": {{ site.title | jsonify }},
+    "url": {{ site.url | jsonify }}{% if site.schema_org.logo %},
+    "logo": {{ site.schema_org.logo | jsonify }}{% endif %}{% if site.description %},
+    "description": {{ site.description | jsonify }}{% endif %}
+  }
+  </script>
+  {% endif %}
 </head>
