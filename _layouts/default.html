@@ -2,7 +2,22 @@
 layout: base
 ---
 
-<section class="documentation">
+{% comment %}Determine if a sidebar section matches the current page{% endcomment %}
+{% assign _has_sidebar = false %}
+{% for section in site.data.navigation_sidebar.sections %}
+  {% assign _matched = false %}
+  {% if section.match_list %}
+    {% for m in section.match_list %}
+      {% if page.url contains m %}{% assign _matched = true %}{% break %}{% endif %}
+    {% endfor %}
+  {% elsif section.match %}
+    {% if page.url contains section.match %}{% assign _matched = true %}{% endif %}
+  {% endif %}
+  {% if _matched %}{% assign _has_sidebar = true %}{% break %}{% endif %}
+{% endfor %}
+
+<section class="documentation{% unless _has_sidebar %} no-sidebar{% endunless %}">
+  {% if _has_sidebar %}
   <!-- Mobile sidebar backdrop -->
   <div class="docs-nav-backdrop"></div>
 
@@ -12,6 +27,7 @@ layout: base
       {% include sidebar-nav.html %}
     </div>
   </nav>
+  {% endif %}
 
   <!-- Main Article -->
   <article>
