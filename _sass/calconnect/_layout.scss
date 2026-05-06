@@ -70,6 +70,11 @@
   }
 }
 
+// No-sidebar variant: article takes full width
+.documentation.no-sidebar > article {
+  max-width: none;
+}
+
 // Main article
 .documentation > article {
   flex: 1;
